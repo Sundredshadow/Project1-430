@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+    <title>Falling Sand</title>
+    <link rel="stylesheet" type="text/css" href="css/default-styles.css">
+    <script src="src/edsLIB.js"></script>
+	<script src="src/index.js"></script>
+	<script src="src/physics.js"></script>
+</head>
+<body>
+	<section id=page>
+	<div class=Info>
+		<h2>Coding Info</h2>
+		<h4>Data Management:</h4>
+		<p>Two 2d-arrays at minimum are needed. One that holds all the blocks or their id numbers, and the other that indicates which blocks have already moved. Important to have second one because it can when iterating through for loop cause blocks to teleport directly downward, or to the right. (Depends on how you arrange the loop)</p>
+		<a href="https://w-shadow.com/blog/2009/09/29/falling-sand-style-water-simulation/"><img src="src/images/whee.png" alt="Unavailable Image"></a>
+		<h4>Optimizations:</h4>
+		<ul>
+			<li>Currently Implemented:
+				<ul>
+					<li>In JavaScript use a typed array. Saves a lot a data, and greatly speeds up code.</li>
+					<li>When calculating random numbers make it either frame based or create a bunch before running in an array. Saves a bit of running speed.</li>
+					<li>Cap FPS, don’t let canvas or whatever you are using over work itself.</li>
+				</ul>
+			</li>
+			<li>Not Currently Implemented:
+				<ul>
+					<li>Multi-Threading: If language allows it or by using Web Assembly can greatly speed up calculations.</li>
+					<li>Management system: Simply have a system in place that knows which blocks are moving/interacting and cut out the rest.</li>
+					<li>Bit masking: I did not use this but when it comes to doing checks using things such as a bitmask/ bit shifting can make the code incredibly more efficient </li>
+				</ul>
+			</li>
+		</ul>
+		<h4>Types of Physics:</h4>
+		<p>At the core of this code only three types.</p>
+		<ul>
+			<li>Sand Physics: Checks if can go down if it cannot check if it can go down diagonally. Ex: Sand, Salt</li>
+			<li>Water Physics: After running sand physics if the block has not moved the block attempts to move left or right. Ex: Water, Salt Water, Mercury, Acid, Oil</li>
+			<li>Gas Physics: Works the same as water physics except the sand physics calculation prior to executing water physics calculation is upside down. Ex: Smoke, Fire</li>
+		</ul>
+		<a href="https://w-shadow.com/blog/2009/09/29/falling-sand-style-water-simulation/"><img src="src/images/gravity-simulation-rules.png" alt="Unavailable Image"></a>
+	</div>
+	<div id=middle>
+	<h1>Falling Sand</h1>
+	<canvas>
+		Get a real browser!
+		<!-- The user will only see the above text if their browser is older and doesn't support <canvas> -->
+	</canvas>
+	<div id=BlockTypes>
+		<button id="Void">Void</button> 
+		<button id="Sand">Sand</button> 
+		<button id="Water">Water</button>
+		<button id="Salt">Salt</button>
+		<button id="Smoke">Smoke</button>
+		<button id="Wall">Wall</button>
+		<button id="SaltWater">Salt Water</button>
+		<button id="Oil">Oil</button>
+		<button id="Acid">Acid</button>
+		<button id="Mercury">Mercury</button>
+		<button id="Fire">Fire</button>
+		<button id="Reset">Reset</button>
+		<button id="PausePlay">Pause/Play</button>
+		<button id="Save">Save</button>
+		<button id="Load">Load</button>
+	</div>
+	<div id=Sliders>
+		<div>
+		<label>Gravity Speed: 
+			<input type="range" min="1" max="10" value="1" class="slider" id="gravitySpeed">
+		</label>
+		<label>Decrease Flow Chance: 
+			<input type="range" min="1" max="100" value="1" class="slider" id="flowChance">
+		</label>
+		</div>
+		<label>Flow Speed: 
+			<input type="range" min="1" max="100" value="1" class="slider" id="flowSpeed">
+        </label>
+        <label>Pen Size: 
+            <input type="range" min="0" max="4" value="2" class="slider" id="penSize">
+        </label>
+	</div>
+	<div id=Sources>
+		<!--embed straight from youtube note for some reason 
+			when connect to youtube in a non-chrome browser it
+			 throws an error and bunch of warnings. Not a big 
+			 deal though everything still works
+			couldn't figure out how to fix it-->
+
+			<div class=source>
+				<p>Incredibly useful blogpost by <a href="https://w-shadow.com/blog/2009/09/29/falling-sand-style-water-simulation/">White Shadow</a>. Pretty much goes step by step on how to implement basic falling sand physics.</p>
+				<a href="https://w-shadow.com/blog/2009/09/29/falling-sand-style-water-simulation/"><img width="560" height="315" src="src/images/map-representation.png" alt="Unavailable Image"></a>
+			</div>
+
+			<div class=source>
+				<p>A GDC conference by one of the devs of Noita, Petri Purho. Gives a good talk on potential of using falling sand physics in larger more encompassing genres.</p>
+				<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/prXuyMCgbTc" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+			</div>
+			<div class=source>
+			<p>Interesting video inspired by the devs from Noita.
+				Gives a really good synopsis on how falling sand games work.
+				On a more basic level.</p>
+			<!--<iframe width="560" height="315" src="https://www.youtube.com/embed/VLZjd_Y1gJ8" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+			</div>
+
+			<div class=source>
+				<p>
+					<a href="https://dan-ball.jp/en/javagame/dust/">Dan-Ball</a>
+					An extraordinarily complex and intricate falling sand game. Particularly good source for block-types
+                    and has a very indepth wiki on different interactions
+					<a href="https://danball.fandom.com/wiki/Nitro_(Powder_Game_element)">Dan-Ball Wiki</a>
+				
+					<a href="https://dan-ball.jp/en/javagame/dust/"><img width="560" height="315" src="src/images/title5.png" alt="Unavailable Image"></a>
+				</p>
+			</div>
+
+			<div class=source>
+				<p>
+					<a href="https://sandspiel.club">Sandspiel</a>
+					 is another good example of a falling sand game. Less complex then danball, which is why it is useful as reference when coding physics. Also, the creator Max Bittker has a good blogpost and talk on it as well.
+					<a href="https://maxbittker.com/making-sandspiel">Blog post</a>, <a href="https://2019.jsconf.eu/max-bittker/simulating-sand-building-interactivity-with-webassembly.html">Talk</a>
+					<a href="https://sandspiel.club"><img width="560" height="315" src="src/images/Screenshot.png" alt="Unavailable Image"></a>
+				</p>
+			</div>
+		</div>
+	</div>
+	<div class=Info>
+		<h2>Play Info</h2>
+		<h4>Description</h4>
+		<p>A Falling Sand game is a simple game that runs physics calculations to represent different state of simple worldly components, such as solids, liquids, and gases, in a simple block calculation format.</p>
+		<h4>Density:</h4>
+		<p>Internal Switch statement (can be a bitmask) that manages what blocks can flow through one another</p>
+		<ul>
+			<li>Acid: Technically speaking least dense but destroys everything before effect can be seen.</li>
+			<li>Oil: Least dense cannot flow through anything</li>
+			<li>Water: Oil</li>
+			<li>Salt Water: Oil, Water</li>
+			<li>Sand/Salt: Oil, Water, Salt Water</li>
+			<li>Mercury: Oil, Water, Salt Water, Sand, Salt (Most dense block type)</li>
+			<li>Note: Gases densities can be compared with one another with this system but currently only have one with visible effects Smoke.</li>
+		</ul>
+		<h4>Interactions:</h4>
+		<p>Internal Switch statement (can be a bitmask) that manages block interactions</p>
+		<ul>
+			<li>When salt and water are mixed, one of the two is deleted and the other becomes salt water.</li>
+			<li>Acid when touching anything other than Wall deletes itself and what it is touching.</li>
+			<li>Fire by itself creates smoke.</li>
+			<li>Fire when touching oil ignites it, destroying it, as well as creating additional smoke.</li>
+		</ul>
+
+		<h4>Sliders:</h4>
+		<ul>
+			<li>Gravity Speed: Increases the amount of blocks a block can go downward per frame.</li>
+			<li>Flow Speed: Increases the amount of blocks a block can go sideways per frame.</li>
+			<li>Decrease Flow Chance: Decreases the frequency at which water physics blocks will choose to flow</li>
+			<li>Pen size: Size you can draw at</li>
+		</ul>
+
+	</div>
+</section>
+	<footer>Ethan Shea 9/26/2020</footer>
+</body>
+</html>

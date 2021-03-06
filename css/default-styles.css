@@ -1,0 +1,244 @@
+@font-face {
+    font-family: "myFont";
+    src: url("fonts/BarlowSemiCondensed-ThinItalic.ttf");
+}
+*{
+    margin:0;
+    padding:0;
+}
+body{
+    font-family: "myFont",'Courier New', Courier, monospace;
+    display: block;
+    background-color:#293132;
+    background-position:center top;
+    position: relative;
+}
+
+a{
+    color:white;
+}
+p{
+    text-align: center;
+    margin:1px;
+}
+ul{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+iframe,img{
+    display: block;
+    margin:auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#page{
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    margin-bottom: 10px;
+    justify-content: space-evenly;
+    color:white;
+}
+.Info{
+    border:3px solid gray;
+    padding: 10px;
+    margin:25px;
+    text-align: left;
+    width:400px;
+}
+h1{
+    font-size: 72px;
+    text-align: center;
+}
+
+canvas{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    margin-bottom: 10px;
+    justify-content: space-evenly;
+    color:white;
+    border:1px solid gray;
+}
+
+#BlockTypes{
+    display: flex;
+    flex-wrap: wrap;
+    width: 640px;
+    height:100px;
+    margin: auto;
+    align-items: center;
+    justify-content: center; 
+    border: 2px solid black;
+}
+#Sliders{
+    display: flex;
+    color:white;
+    flex-wrap: wrap;
+    width: 640px;
+    height:100px;
+    margin-top:5px;
+    margin-left: auto;
+    margin-right: auto;
+    align-items: center;
+    justify-content: space-evenly; 
+    border: 2px solid black;
+}
+
+
+
+button{
+    background-color: rgb(100, 100, 100); /* Green */
+    border: none;
+    color: white;
+    margin-left: 5px;
+    margin-right: 5px;
+    width:75px;
+    height:20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+}
+button:active
+{
+    background-color: black;
+    color:white;
+    opacity: 0.6;
+}
+
+#Void{
+    background-color: black;
+    color:white;
+}
+#Void:hover{
+    background-color: rgb(43, 43, 43);
+    color: white;
+    border: 1px solid rgb(34, 34, 34);
+}
+#Sand{
+    background-color: yellow;
+    color:black;
+}
+#Sand:hover{
+    background-color: rgb(203, 226, 70);
+    color: black;
+    border: 1px solid rgba(203, 226, 70, 0.705);
+}
+#Water{
+    background-color: blue;
+    color:white;
+}
+#Water:hover{
+    background-color: #3185FC;
+    color: white;
+    border: 1px solid #3185fca8;
+}
+
+#Salt{
+    background-color:white;
+    color:black;
+}
+#Salt:hover{
+    background-color: rgba(255, 255, 255, 0.623);
+    border: 1px solid rgba(255, 255, 255, 0.397);
+}
+#Smoke{
+    background-color: rgba(220,220,220,0.1);
+    color:white;
+}
+#Smoke:hover{
+    background-color: rgba(150, 150, 150, 0.1);
+    border: 1px solid rgba(82, 82, 82, 0.1);
+}
+
+#Wall{
+    background-color: gray;
+    color:white;
+}
+#Wall:hover{
+    background-color: rgb(92, 92, 92);
+    border: 1px solid rgb(56, 56, 56);
+}
+
+#SaltWater{
+    background-color: cyan;
+    color:black;
+}
+#SaltWater:hover{
+    background-color: rgba(0, 255, 255, 0.493);
+    border: 1px solid rgba(0, 255, 255, 0.37);
+}
+
+#Oil{
+    background-color: brown;
+    color:black;
+}
+#Oil:hover{
+    background-color: rgba(165, 42, 42, 0.541);
+    border: 1px solid rgba(165, 42, 42, 0.281);
+}
+
+#Acid{
+    background-color: #90ee90;
+    color:black;
+}
+#Acid:hover{
+    background-color: #90ee90a2;
+    border: 1px solid #90ee9054;
+}
+
+#Mercury{
+    background-color: #BBBBBB;
+    color:black;
+}
+#Mercury:hover{
+    background-color: #bbbbbb91;
+    border: 1px solid #bbbbbb4b;
+}
+
+#Fire{
+    background-color: red;
+    color:black;
+}
+#Fire:hover{
+    background-color: rgba(255, 0, 0, 0.623);
+    border: 1px solid rgba(255, 0, 0, 0.384);
+}
+
+#Reset:hover
+{
+    background-color: rgb(43, 43, 43);
+    border: 1px solid rgb(34, 34, 34);
+}
+#PausePlay:hover
+{
+    background-color: rgb(43, 43, 43);
+    border: 1px solid rgb(34, 34, 34);
+}
+
+#Sources{
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    width: 640px;
+    height: auto;
+    margin-bottom: 20px;
+    justify-content: center;
+    color:white;
+}
+.source{
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    margin:5px;
+    border: 2px solid black;
+}
+footer{
+    display: flex;
+    color:white;
+    justify-content: center;
+}
