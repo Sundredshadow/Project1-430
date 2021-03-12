@@ -196,6 +196,7 @@
     "pretest": "eslint ./src --fix",
     "test": "echo \"Test Complete\""
   },
+		
   "author": "Ethan Shea",
   "license": "UNLICENSED",
   "repository": {

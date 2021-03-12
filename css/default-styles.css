@@ -237,6 +237,9 @@ button:active
     margin:5px;
     border: 2px solid black;
 }
+#hiddenCanvas{
+    display: none;
+}
 footer{
     display: flex;
     color:white;

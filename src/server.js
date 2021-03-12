@@ -17,37 +17,39 @@ const urlStruct = {
     '/src/images/map-representation.png': htmlHandler.getPNG,
     '/src/images/whee.png': htmlHandler.getPNG,
     '/src/images/gravity-simulation-rules.png': htmlHandler.getPNG,
-    '/src/index.js': scriptHandler.getScript,
-    '/src/edsLIB.js': scriptHandler.getScript,
-    '/src/physics.js': scriptHandler.getScript,
-    '/src/client.js': scriptHandler.getScript,
-    '/loadmap':jsonHandler.getData,
+    '/src/index': scriptHandler.getScript,
+    '/src/edsLIB': scriptHandler.getScript,
+    '/src/physics': scriptHandler.getScript,
+    '/src/client': scriptHandler.getScript,
+    '/src/loader': scriptHandler.getScript,
+    '/src/loadBar': scriptHandler.getScript,
+    '/loadmap': jsonHandler.getData,
     notFound: jsonHandler.notFound,
   },
   HEAD: {
-    '/getUsers': jsonHandler.getUsersMeta,
+    // '/getUsers': jsonHandler.getUsersMeta,
     notFound: jsonHandler.notFoundMeta,
   },
 };
 
 const handlePost = (request, response, parsedUrl) => {
   if (parsedUrl.pathname === '/savestate') {
-    const body=[];
-    request.on('error',(err)=>{
+    const body = [];
+    request.on('error', (err) => {
       console.dir(err);
-      response.statusCode=400;
+      response.statusCode = 400;
       response.end();
     });
 
-    request.on('data',(chunk)=>{
+    request.on('data', (chunk) => {
       body.push(chunk);
     });
 
-    request.on('end',()=>{
-      const bodyString=Buffer.concat(body).toString();
-      const bodyParams=query.parse(bodyString);
+    request.on('end', () => {
+      const bodyString = Buffer.concat(body).toString();
+      const bodyParams = query.parse(bodyString);
 
-      jsonHandler.addData(request,response,bodyParams);
+      jsonHandler.addData(request, response, bodyParams);
     });
   }
 };
@@ -60,13 +62,10 @@ const onRequest = (request, response) => {
 
   if (request.method === 'POST') {
     handlePost(request, response, parsedUrl);
+  } else if (urlStruct[request.method][parsedUrl.pathname]) { // handle get
+    urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl.pathname);
   } else {
-    // handle get
-    if (urlStruct[request.method][parsedUrl.pathname]) {
-      urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl.pathname);
-    } else {
-      urlStruct[request.method].notFound(request, response);
-    }
+    urlStruct[request.method].notFound(request, response);
   }
 };
 

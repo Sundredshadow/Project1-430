@@ -20,11 +20,11 @@ const respondJSONMeta = (request, response, status) => {
 };
 
 const getData = (request, response) => {
-  let data= saves['eds7847'];
+  const data = saves.eds7847;
   const responseJSON = {
     data,
   };
-  //console.dir(saves);
+  // console.dir(saves);
   return respondJSON(request, response, 200, responseJSON);
 };
 
@@ -32,24 +32,24 @@ const addData = (request, response, body) => {
   const responseJSON = {
     message: 'Name and age are both required',
   };
-  if (!body.gravitySpeed || !body.flowSpeed||!body.flowChance||!body.penSize||!body.blocks) {
+  if (!body.gravitySpeed || !body.flowSpeed || !body.flowChance || !body.penSize || !body.blocks) {
     responseJSON.id = 'missingParams';
     return respondJSON(request, response, 400, responseJSON);
   }
 
   let responseCode = 201;
-  //need to create a unique identifier(for now temporarily only on possible save)
-  if (saves['eds7847']) {
+  // need to create a unique identifier(for now temporarily only on possible save)
+  if (saves.eds7847) {
     responseCode = 204;
   } else {
-    saves['eds7847'] = {};
-    saves['eds7847'].name = 'eds7847';
+    saves.eds7847 = {};
+    saves.eds7847.name = 'eds7847';
   }
-  saves['eds7847'].gravitySpeed=body.gravitySpeed;
-  saves['eds7847'].flowSpeed=body.flowSpeed;
-  saves['eds7847'].flowChance=body.flowChance;
-  saves['eds7847'].penSize=body.penSize;
-  saves['eds7847'].blocks=body.blocks;
+  saves.eds7847.gravitySpeed = body.gravitySpeed;
+  saves.eds7847.flowSpeed = body.flowSpeed;
+  saves.eds7847.flowChance = body.flowChance;
+  saves.eds7847.penSize = body.penSize;
+  saves.eds7847.blocks = body.blocks;
 
   if (responseCode === 201) {
     responseJSON.message = 'Created Successfully!';
@@ -61,14 +61,14 @@ const addData = (request, response, body) => {
 
 const getUsersMeta = (request, response) => respondJSONMeta(request, response, 200);
 
-const updateUser = (request, response) => {
-  const newUser = {
-    createdAt: Date.now(),
-  };
-  users[newUser.createdAt] = newUser;
+// const updateUser = (request, response) => {
+//   // const newUser = {
+//   //   createdAt: Date.now(),
+//   // };
+//   // users[newUser.createdAt] = newUser;
 
-  return respondJSON(request, response, 201, newUser);
-};
+//   // return respondJSON(request, response, 201, newUser);
+// };
 
 const notFound = (request, response) => {
   const responseJSON = {
@@ -84,7 +84,7 @@ module.exports = {
   getData,
   addData,
   getUsersMeta,
-  updateUser,
+  // updateUser,
   notFound,
   notFoundMeta,
 };
