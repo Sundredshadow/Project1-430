@@ -22,17 +22,12 @@ const respondJSONMeta = (request, response, status) => {
 };
 
 const getData = (request, response, data) => {
-  //console.dir(data);
   data=data.replace(/[^0-9]/g, '');//set to only numbers
-  //console.dir(data);
-  //console.dir(saves);
   if (data) {
     const element = saves.find((item) => item.name === data);
-    //console.dir(element);
     const responseJSON = {
       element,
     };
-    // console.dir(saves);
     return respondJSON(request, response, 200, responseJSON);
   }
   return notFound(request, response);
@@ -46,6 +41,16 @@ const getID = (request, response) => {
   };
   return respondJSON(request, response, 200, responseJSON);
 };
+
+// generates an unique id(essentially just iterates through numbers)
+const getSize = (request, response) => {
+  let length=saves.length;
+  const responseJSON = {
+    length,
+  };
+  return respondJSON(request, response, 200, responseJSON);
+};
+
 
 const addData = (request, response, body) => {
   const responseJSON = {
@@ -102,6 +107,7 @@ const notFoundMeta = (request, response) => respondJSONMeta(request, response, 4
 module.exports = {
   getData,
   getID,
+  getSize,
   addData,
   // getUsersMeta,
   // updateUser,

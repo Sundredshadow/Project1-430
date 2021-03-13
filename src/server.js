@@ -24,7 +24,6 @@ const handleQueryData = (request, response) => {
   request.on('end', () => {
     const bodyString = Buffer.concat(body).toString();
     const bodyParams = query.parse(bodyString);
-    console.dir(bodyParams);
     if (request.method === 'POST') { // post
       jsonHandler.addData(request, response, bodyParams);
     }
@@ -49,6 +48,7 @@ const urlStruct = {
     '/src/loadBar': scriptHandler.getScript,
     '/loadmap': jsonHandler.getData,
     '/getID': jsonHandler.getID,
+    '/sizeOfSaves':jsonHandler.getSize,
     notFound: jsonHandler.notFound,
   },
   HEAD: {

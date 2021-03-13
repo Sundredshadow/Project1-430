@@ -13,6 +13,9 @@ let hiddenCtx;
 // loadmenuBar
 let loadmenuBar;// just html element
 
+//checks if there is data to be loaded 
+let xhrUpdated=0;//compared to size of save array from GET request
+
 const hiddenCanvasInit = () => {
   hiddenCtx = hiddenCanvas.getContext('2d');
   hiddenCanvas.width = width;
@@ -71,6 +74,16 @@ const handleResponse = (xhr, parseResponse) => {
       physics.SetBlocks(newBlocks);
       // draw to canvas using the data
       // edsLIB.draw(ctx, cols, rows, newBlocks);
+    }else if (obj.length) {
+      //based on the size  xhrUpdated and saves size add more img buttons
+      if(xhrUpdated<obj.length){
+        //clear all img buttons
+        loadmenuBar.innerHTML='';
+        //add them all back
+        for(let i=1; i<obj.length+1;i++){
+            loadDataInitButton(i);
+        }
+      }
     } else { // must be /getID
       loadDataInitButton(obj.uuid.ID);// intialize load button
     }
@@ -119,10 +132,10 @@ const xhrInit = () => {
   saveButton.addEventListener('click', getID);
   saveButton.addEventListener('click', addSave);
 
-  // load button functionality//GET
-  const loadButton = document.querySelector('#Load');
-  const loadSave = (e) => requestUpdate(e, '/loadmap');
-  loadButton.addEventListener('click', loadSave);
+  // refreshes to see if more load image buttons need to added//GET
+  const  refreshButton= document.querySelector('#Refresh');
+  const refreshes = (e) => requestUpdate(e, '/sizeOfSaves');
+  refreshButton.addEventListener('click', refreshes);
 };
 
 export { hiddenCanvasInit, loadDataInitButton, xhrInit };
