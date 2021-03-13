@@ -6,6 +6,30 @@ const jsonHandler = require('./jsonResponses.js');
 const scriptHandler = require('./scriptResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
+let savedRequest;
+let savedResponse;
+
+const handleQueryData = (request, response) => {
+  const body = [];
+  request.on('error', (err) => {
+    console.dir(err);
+    response.statusCode = 400;
+    response.end();
+  });
+
+  request.on('data', (chunk) => {
+    body.push(chunk);
+  });
+
+  request.on('end', () => {
+    const bodyString = Buffer.concat(body).toString();
+    const bodyParams = query.parse(bodyString);
+    console.dir(bodyParams);
+    if (request.method === 'POST') { // post
+      jsonHandler.addData(request, response, bodyParams);
+    }
+  });
+};
 
 const urlStruct = {
   GET: {
@@ -24,6 +48,7 @@ const urlStruct = {
     '/src/loader': scriptHandler.getScript,
     '/src/loadBar': scriptHandler.getScript,
     '/loadmap': jsonHandler.getData,
+    '/getID': jsonHandler.getID,
     notFound: jsonHandler.notFound,
   },
   HEAD: {
@@ -32,38 +57,20 @@ const urlStruct = {
   },
 };
 
-const handlePost = (request, response, parsedUrl) => {
-  if (parsedUrl.pathname === '/savestate') {
-    const body = [];
-    request.on('error', (err) => {
-      console.dir(err);
-      response.statusCode = 400;
-      response.end();
-    });
-
-    request.on('data', (chunk) => {
-      body.push(chunk);
-    });
-
-    request.on('end', () => {
-      const bodyString = Buffer.concat(body).toString();
-      const bodyParams = query.parse(bodyString);
-
-      jsonHandler.addData(request, response, bodyParams);
-    });
-  }
-};
-
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
+  savedRequest = request;
+  savedResponse = response;
   console.dir(parsedUrl.pathname);
   console.dir(request.method);
 
   if (request.method === 'POST') {
-    handlePost(request, response, parsedUrl);
-  } else if (urlStruct[request.method][parsedUrl.pathname]) { // handle get
-    urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl.pathname);
+    handleQueryData(request, response);// true is post request
+  }else if(parsedUrl.query){ //running GET based on id parameter
+    urlStruct['GET']['/loadmap'](request,response,parsedUrl.query);
+  }else if (urlStruct[request.method][parsedUrl.pathname]) { // handle get
+    urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl);
   } else {
     urlStruct[request.method].notFound(request, response);
   }

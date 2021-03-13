@@ -1,3 +1,4 @@
+/* global document */
 // fill random array before load so can use psuedo randomint
 const randoms = new Float32Array(1000).fill(0);
 for (let z = 0; z < 1000; z++) {
@@ -158,7 +159,7 @@ function GetGravity() {
 }
 function SetGravity(gravity) {
   gravitySpeed = gravity;
-  document.querySelector('#gravitySpeed').value=gravitySpeed;
+  document.querySelector('#gravitySpeed').value = gravitySpeed;
 }
 
 function GetSlide() {
@@ -173,7 +174,7 @@ function GetFlowSpeed() {
 }
 function SetFlowSpeed(flow) {
   flowSpeed = flow;
-  document.querySelector('#flowSpeed').value=flow;
+  document.querySelector('#flowSpeed').value = flow;
 }
 
 function GetRising() {
@@ -188,7 +189,7 @@ function GetFlowChance() {
 }
 function SetFlowChance(chance) {
   flowChance = chance;
-  document.querySelector('#flowChance').value=flowChance;
+  document.querySelector('#flowChance').value = flowChance;
 }
 
 function GetPenSize() {
@@ -196,7 +197,7 @@ function GetPenSize() {
 }
 function SetPenSize(newSize) {
   penSize = newSize;
-  document.querySelector('#penSize').value=penSize;
+  document.querySelector('#penSize').value = penSize;
 }
 
 export {

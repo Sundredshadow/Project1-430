@@ -15,15 +15,15 @@ const getCSS = (request, response) => {
   response.end();
 };
 
-const getPNG = (request, response, pathname) => {
+const getPNG = (request, response, parsedUrl) => {
   response.writeHead(200, { 'Content-Type': 'image/png' });
-  response.write(fs.readFileSync(`${__dirname}/..${pathname}`));
+  response.write(fs.readFileSync(`${__dirname}/..${parsedUrl.pathname}`));
   response.end();
 };
 
-const getFont = (request, response, pathname) => {
+const getFont = (request, response, parsedUrl) => {
   response.writeHead(200, { 'Content-Type': 'font/ttf' });
-  response.write(fs.readFileSync(`${__dirname}/..${pathname}`));
+  response.write(fs.readFileSync(`${__dirname}/..${parsedUrl.pathname}`));
   response.end();
 };
 

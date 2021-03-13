@@ -1,13 +1,13 @@
 /* global document, XMLHttpRequest */
-
 import * as edsLIB from './edsLIB';
 import * as physics from './physics';
 
 const hiddenCanvas = document.querySelector('#hiddenCanvas');
+const canvas = document.querySelector('canvas');
 const width = 640;// canvas height and width
 const height = 480;
-const rows = height / 5;
-const cols = width / 5;
+// const rows = height / 5;
+// const cols = width / 5;
 let hiddenCtx;
 
 // loadmenuBar
@@ -24,16 +24,16 @@ const hiddenCanvasInit = () => {
 //     //need meta data within the img tag to be able to get something from the request
 //     //hence post request needs to create a unique identifier
 // }
-
-const loadData = (data) => {
-  // first draw to canvas using the data
-  edsLIB.draw(hiddenCtx, cols, rows, data);
-  // now turn that data into a png and add it to the page
-  loadmenuBar.innerHTML += `<img width=10% height=10% src=${hiddenCanvas.toDataURL()} alt="Not able to load image">`;
+const loadDataInitButton = (currentID) => {
+  // turn data into a img and add it to the page
+  loadmenuBar.innerHTML += `<img class='Load' id='-${currentID}-' width=10% height=10% src=${canvas.toDataURL()} alt="Not able to load image">`;
   // now click event to loed into game via a get request
-  // const loadButton = document.querySelector('#Load');
-  // const loadSave = (e) => requestUpdate(e);
-  // loadButton.addEventListener('click', loadSave);
+  const loadButtons = document.querySelectorAll('.Load');
+  for (const button of loadButtons) {
+    const data =`?${button.id}`;
+    const loadSave = (e) => requestUpdate(e, '/loadmap', data);
+    button.addEventListener('click', loadSave);
+  }
 };
 
 // xhr stuff////////////////////////////////////////////////////////////////////////
@@ -53,7 +53,7 @@ const handleResponse = (xhr, parseResponse) => {
       break;
     case 404:
       console.log('Resource Not Found!');
-      break;
+      return;
     default:
       console.log('Error code not implemented by client!');
       break;
@@ -61,28 +61,35 @@ const handleResponse = (xhr, parseResponse) => {
 
   if (parseResponse) {
     const obj = JSON.parse(xhr.response);
-    // console.dir(obj);
-    // console.log(`${xhr.response}`);
-    edsLIB.SetGravity(obj.data.gravitySpeed);
-    edsLIB.SetFlowChance(obj.data.flowChance);
-    edsLIB.SetFlowSpeed(obj.data.flowSpeed);
-    edsLIB.SetPenSize(obj.data.penSize);
-    const newBlocks = Uint8Array.from(obj.data.blocks.split(','));
-    physics.SetBlocks(newBlocks);
-    loadData(newBlocks);
+    //console.log(`${xhr.response}`);
+    if (obj.element) { // must be /loadmap
+      edsLIB.SetGravity(obj.element.gravitySpeed);
+      edsLIB.SetFlowChance(obj.element.flowChance);
+      edsLIB.SetFlowSpeed(obj.element.flowSpeed);
+      edsLIB.SetPenSize(obj.element.penSize);
+      const newBlocks = Uint8Array.from(obj.element.blocks.split(','));
+      physics.SetBlocks(newBlocks);
+      // draw to canvas using the data
+      // edsLIB.draw(ctx, cols, rows, newBlocks);
+    } else { // must be /getID
+      loadDataInitButton(obj.uuid.ID);// intialize load button
+    }
   } else {
     console.log('Meta Data Received');
   }
 };
 
-const requestUpdate = (e) => {
+const requestUpdate = (e, path, data) => {
   const xhr = new XMLHttpRequest();
-  xhr.open('GET', '/loadmap');
+  console.log(data);
+  if(!data){
+    data='';
+  }
+  xhr.open('GET', path+data);
 
   xhr.setRequestHeader('Accept', 'application/json');
 
   xhr.onload = () => handleResponse(xhr, true);
-
   xhr.send();
   e.preventDefault();
   return false;
@@ -97,6 +104,7 @@ const sendPost = (e) => {
 
   xhr.onload = () => handleResponse(xhr);
 
+  // need to set as json instead
   const data = `gravitySpeed=${edsLIB.GetGravity()}&flowSpeed=${edsLIB.GetFlowSpeed()}&flowChance=${edsLIB.GetFlowChance()}&penSize=${edsLIB.GetPenSize()}&blocks=${physics.GetBlocks()}`;// all data needed to be saved goes here
   xhr.send(data);
 
@@ -104,15 +112,17 @@ const sendPost = (e) => {
 };
 
 const xhrInit = () => {
-  // intializes save button functionality//POST
+  // intializes save button functionality
   const saveButton = document.querySelector('#Save');
-  const addSave = (e) => sendPost(e);
+  const getID = (e) => requestUpdate(e, '/getID');// GET id to use to load
+  const addSave = (e) => sendPost(e);// send POST request
+  saveButton.addEventListener('click', getID);
   saveButton.addEventListener('click', addSave);
 
   // load button functionality//GET
   const loadButton = document.querySelector('#Load');
-  const loadSave = (e) => requestUpdate(e);
+  const loadSave = (e) => requestUpdate(e, '/loadmap');
   loadButton.addEventListener('click', loadSave);
 };
 
-export { hiddenCanvasInit, loadData, xhrInit };
+export { hiddenCanvasInit, loadDataInitButton, xhrInit };
