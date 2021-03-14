@@ -1,4 +1,5 @@
 import * as edsLIB from './edsLIB';
+// takenfrom my own project1 from 330 https://people.rit.edu/eds7847/330/Project1-Falling-Sand/
 
 // self.onmessage=function(e){
 //     console.log("loaded web worker");

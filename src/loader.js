@@ -1,4 +1,5 @@
 /* global window */
+// takenfrom my own project1 from 330 https://people.rit.edu/eds7847/330/Project1-Falling-Sand/
 import * as index from './index';
 
 window.onload = () => {

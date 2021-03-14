@@ -1,3 +1,4 @@
+// derieved from http-api-assignment-ii
 // Note this object is purely in memory
 const saves = [];
 const uuid = {};
@@ -21,16 +22,45 @@ const respondJSONMeta = (request, response, status) => {
   response.end();
 };
 
+const notFound = (request, response) => {
+  const responseJSON = {
+    message: 'The page you were looking for was not found',
+    id: 'notFound',
+  };
+  return respondJSON(request, response, 404, responseJSON);
+};
+
+const notFoundMeta = (request, response) => respondJSONMeta(request, response, 404);
+
+// returns data of a single element or id of a data point in saves
+const getDataMeta = (request, response, data) => {
+  const newdata = data.replace(/[^0-9]/g, '');// set to only numbers
+  if (newdata) {
+    const element = saves.find((item) => item.name === newdata);
+    if (!element) {
+      return notFoundMeta(request, response);
+    }
+    return respondJSONMeta(request, response, 200);
+  }
+  return respondJSONMeta(request, response, 404);
+};
+
 const getData = (request, response, data) => {
-  data=data.replace(/[^0-9]/g, '');//set to only numbers
-  if (data) {
-    const element = saves.find((item) => item.name === data);
+  const newdata = data.replace(/[^0-9]/g, '');// set to only numbers
+  if (newdata) {
+    const element = saves.find((item) => item.name === newdata);
+    if (!element) {
+      return notFound(request, response);
+    }
     const responseJSON = {
       element,
     };
     return respondJSON(request, response, 200, responseJSON);
   }
-  return notFound(request, response);
+  const responseJSON = {
+    message: 'Bad Request',
+  };
+  return respondJSON(request, response, 404, responseJSON);
 };
 
 // generates an unique id(essentially just iterates through numbers)
@@ -41,16 +71,20 @@ const getID = (request, response) => {
   };
   return respondJSON(request, response, 200, responseJSON);
 };
+// meta
+const getIDMeta = (request, response) => respondJSONMeta(request, response, 200);
 
-// generates an unique id(essentially just iterates through numbers)
+// gets the total size of save length and returns it
 const getSize = (request, response) => {
-  let length=saves.length;
+  const { length } = saves;
   const responseJSON = {
     length,
   };
   return respondJSON(request, response, 200, responseJSON);
 };
 
+// meta
+const getSizeMeta = (request, response) => respondJSONMeta(request, response, 200);
 
 const addData = (request, response, body) => {
   const responseJSON = {
@@ -83,34 +117,14 @@ const addData = (request, response, body) => {
   return respondJSONMeta(request, response, responseCode);
 };
 
-// const getUsersMeta = (request, response) => respondJSONMeta(request, response, 200);
-
-// const updateUser = (request, response) => {
-//   // const newUser = {
-//   //   createdAt: Date.now(),
-//   // };
-//   // users[newUser.createdAt] = newUser;
-
-//   // return respondJSON(request, response, 201, newUser);
-// };
-
-const notFound = (request, response) => {
-  const responseJSON = {
-    message: 'The page you were looking for was not found',
-    id: 'notFound',
-  };
-  return respondJSON(request, response, 404, responseJSON);
-};
-
-const notFoundMeta = (request, response) => respondJSONMeta(request, response, 404);
-
 module.exports = {
   getData,
+  getDataMeta,
   getID,
+  getIDMeta,
   getSize,
+  getSizeMeta,
   addData,
-  // getUsersMeta,
-  // updateUser,
   notFound,
   notFoundMeta,
 };

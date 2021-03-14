@@ -1,4 +1,5 @@
 /* global document, window */
+// takenfrom my own project1 from 330 https://people.rit.edu/eds7847/330/Project1-Falling-Sand/
 import * as physics from './physics';
 import * as edsLIB from './edsLIB';
 import * as loadBar from './loadBar';

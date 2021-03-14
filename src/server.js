@@ -1,3 +1,4 @@
+// derieved from http-api-assignment-ii
 const http = require('http');
 const url = require('url');
 const query = require('querystring');
@@ -6,8 +7,6 @@ const jsonHandler = require('./jsonResponses.js');
 const scriptHandler = require('./scriptResponses.js');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
-let savedRequest;
-let savedResponse;
 
 const handleQueryData = (request, response) => {
   const body = [];
@@ -48,11 +47,13 @@ const urlStruct = {
     '/src/loadBar': scriptHandler.getScript,
     '/loadmap': jsonHandler.getData,
     '/getID': jsonHandler.getID,
-    '/sizeOfSaves':jsonHandler.getSize,
+    '/sizeOfSaves': jsonHandler.getSize,
     notFound: jsonHandler.notFound,
   },
   HEAD: {
-    // '/getUsers': jsonHandler.getUsersMeta,
+    '/loadmap': jsonHandler.getDataMeta,
+    '/getID': jsonHandler.getIDMeta,
+    '/sizeOfSaves': jsonHandler.getSizeMeta,
     notFound: jsonHandler.notFoundMeta,
   },
 };
@@ -60,16 +61,14 @@ const urlStruct = {
 const onRequest = (request, response) => {
   const parsedUrl = url.parse(request.url);
 
-  savedRequest = request;
-  savedResponse = response;
   console.dir(parsedUrl.pathname);
   console.dir(request.method);
 
   if (request.method === 'POST') {
     handleQueryData(request, response);// true is post request
-  }else if(parsedUrl.query){ //running GET based on id parameter
-    urlStruct['GET']['/loadmap'](request,response,parsedUrl.query);
-  }else if (urlStruct[request.method][parsedUrl.pathname]) { // handle get
+  } else if (parsedUrl.query) { // running GET based on id parameter
+    urlStruct.GET['/loadmap'](request, response, parsedUrl.query);
+  } else if (urlStruct[request.method][parsedUrl.pathname]) { // handle get
     urlStruct[request.method][parsedUrl.pathname](request, response, parsedUrl);
   } else {
     urlStruct[request.method].notFound(request, response);

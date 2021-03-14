@@ -45,6 +45,7 @@
 		Get a real browser!
 		<!-- The user will only see the above text if their browser is older and doesn't support <canvas> -->
 	</canvas>
+	<canvas id=hiddenCanvas></canvas>
 	<div id=BlockTypes>
 		<button id="Void">Void</button> 
 		<button id="Sand">Sand</button> 
@@ -60,7 +61,6 @@
 		<button id="Reset">Reset</button>
 		<button id="PausePlay">Pause/Play</button>
 		<button id="Save">Save</button>
-		<button id="Refresh">Refresh</button>
 	</div>
 	<div id=Sliders>
 		<div>
@@ -79,7 +79,9 @@
         </label>
 	</div>
 	<!--Will fill up with potential loads don't wanna use database so using a hidden ctx as worka round-->
+	<p>Saves That Can be Loaded<br>Updates Automatically to Show, All Saves of All Users</p>
 	<div id="LoadMenu"></div>
+	<button id="Refresh">Refresh</button>
 	<div id=Sources>
 		<!--embed straight from youtube note for some reason 
 			when connect to youtube in a non-chrome browser it
@@ -158,7 +160,6 @@
 
 	</div>
 </section>
-	<canvas id=hiddenCanvas>
 	<footer>Ethan Shea 9/26/2020</footer>
 </body>
 </html>

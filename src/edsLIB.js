@@ -1,4 +1,5 @@
 /* global document */
+// takenfrom my own project1 from 330 https://people.rit.edu/eds7847/330/Project1-Falling-Sand/
 // fill random array before load so can use psuedo randomint
 const randoms = new Float32Array(1000).fill(0);
 for (let z = 0; z < 1000; z++) {
